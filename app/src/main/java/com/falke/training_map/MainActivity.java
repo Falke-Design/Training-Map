@@ -39,6 +39,7 @@ public class MainActivity extends Activity {
     DbHelper db;
     Intent myservice;
     int count = 0;
+    int ads;
 
 
     private static final String TAG = "MainActivity";
