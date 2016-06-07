@@ -1,0 +1,75 @@
+<!--
+  ~ Copyright (c) 2016 Martin Pfeffer
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">Mapssss</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="three_dots">…</string>
+    <string name="any_content">Any content</string>
+
+    <!--Dialogs-->
+    <string name="dialog_perm_req_location_title">This app needs location access</string>
+    <string name="dialog_perm_req_location_message">Please grant location access so this app can detect beacons.</string>
+    <string name="dialog_perm_req_location_failed_title">Functionality limited</string>
+    <string name="dialog_perm_req_location_failed_message">"Since location access has not been granted, this app will not be
+        able to record your track in the background."
+    </string>
+    <string name="dialog_gps_inactive_message">Your GPS seems to be disabled, do you want to enable it?</string>
+
+    <!--Navigation Drawer-->
+    <string name="nav_drawer_record">Record</string>
+    <string name="nav_drawer_history">History</string>
+    <string name="nav_drawer_analysis">Analysis</string>
+    <string name="nav_cat_more">More</string>
+    <string name="nav_drawer_settings">Settings</string>
+    <string name="title_activity_maps">Map</string>
+
+    <!--Buttons-->
+    <string name="btn_show_tour">Show tour</string>
+    <string name="btn_calibrate">Calibrate</string>
+    <string name="snack_service_is_running">Service is running…</string>
+    <string name="snack_service_stopped">Service stopped…</string>
+    <string name="unnamed_tour">Unnamed tour</string>
+
+    <!--Toast-->
+    <string name="swipe_left_to_delete">Swipe left to delete</string>
+
+    <!--Preference-->
+    <string name="share_app_intro_text">Hey, check out this app</string>
+    <string name="pref_cat_main">Usability</string>
+    <string name="pref_sum_units" />
+    <string name="pref_title_units">Units</string>
+    <string name="settings">Settings</string>
+    <string name="metric">Metric</string>
+    <string name="imperial">Imperial</string>
+    <string name="pref_title_build_version">Build Version</string>
+
+    <string name="pref_cat_others">Others</string>
+
+    <string name="pref_title_share_app">Tell a friend</string>
+    <string name="pref_title_rate_app">Rate app</string>
+    <string name="empty" />
+    <string name="tour_name">Tour name</string>
+    <string name="tour_note">Tour note</string>
+    <string name="btn_record_start">Record</string>
+    <string name="btn_record_stop">Stop</string>
+
+</resources>
