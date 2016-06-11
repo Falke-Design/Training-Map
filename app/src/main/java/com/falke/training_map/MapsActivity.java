@@ -1,23 +1,58 @@
 package com.falke.training_map;
 
-import android.support.v4.app.FragmentActivity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.falke.training_map.database.DbHelper;
 import com.falke.training_map.database.Point;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.pepperonas.andbasx.base.ToastUtils;
 
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
+    private boolean mCameraUntouched = true;
+
+
+    private class LocationReceiver extends BroadcastReceiver {
+
+        private static final String TAG = "LocationReceiver";
+
+
+        @Override
+        public void onReceive(Context arg0, Intent arg1) {
+            double lat = arg1.getDoubleExtra("latitude", 0);
+            double lng = arg1.getDoubleExtra("longitude", 0);
+
+            ToastUtils.toastShort(lat + "/" + lng);
+
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(new LatLng(lat, lng));
+            CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+
+            if (mMap != null) {
+                mMap.moveCamera(cameraUpdate);
+                if (mCameraUntouched) {
+                    mCameraUntouched = false;
+                    mMap.animateCamera(zoom);
+                }
+            } else Log.e(TAG, "onReceive: OUCH! Map is null");
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +65,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap = mapFragment.getMap();
         mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        LocationReceiver locationReceiver = new LocationReceiver();
+        IntentFilter intentFilter = new IntentFilter(LocationService.LOCATION_BROADCAST);
+        registerReceiver(locationReceiver, intentFilter);
 
 
     }
@@ -56,21 +95,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         getPoints();
     }
 
-    public void getPoints(){
+
+    public void getPoints() {
 
         DbHelper db = new DbHelper(this);
         int count_p = db.count_P();
         List<Point> l = db.getAll_P();
-        Log.d("Points",""+count_p);
+        Log.d("Points", "" + count_p);
 
-        for(int i = 0; i < count_p; i++){
-            Point point=l.get(i);
+        for (int i = 0; i < count_p; i++) {
+            Point point = l.get(i);
             double lat = Double.parseDouble(point.getLAT());
             double lng = Double.parseDouble(point.getLNG());
-            LatLng sydney = new LatLng(lat,lng);
+            LatLng sydney = new LatLng(lat, lng);
             mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
-            Log.d("Points","Punkt " +i+ "LAT"+point.getLAT()+ " LNG"+point.getLNG());
+            Log.d("Points", "Punkt " + i + "LAT" + point.getLAT() + " LNG" + point.getLNG());
         }
     }
 }
