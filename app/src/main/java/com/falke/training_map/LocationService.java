@@ -19,7 +19,6 @@ package com.falke.training_map;
 import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Bundle;
@@ -46,6 +45,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     private static final String TAG = "LocationService";
 
+    public static final String LOCATION_BROADCAST = "location_broadcast";
 
     private static final int FASTEST_INTERVAL = 0;
     private static final int INTERVAL = 5000;
@@ -59,26 +59,17 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
 
-    private SensorManager mSensorManager;
-
     private DbHelper mDb;
-    private long mCurrentTourId;
 
-    private float m_rAngleCalibration = 0F;
-    private float rAngle = 0F; // value to store in database
 
-    private float mMaxGforce = 0; // value to store in database
     private String mTourName = "";
-    private String mTourNote = "";
 
-    int tourID = 0;
+    private int tourID = 0;
 
 
     @Override
     public IBinder onBind(Intent intent) {
-        m_rAngleCalibration = intent.getFloatExtra("r_angle_calibration", 0f);
         mTourName = intent.getStringExtra("tour_name");
-        mTourNote = intent.getStringExtra("tour_note");
 
         return mBinder;
     }
@@ -92,7 +83,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         if (mTourName.equals("")) {
             mTourName = getString(R.string.unnamed_tour);
         }
-
 
 
         // mCurrentTourId = mDb.addTour(new Tour(mTourName, System.currentTimeMillis(), true, mTourNote));
@@ -157,7 +147,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.d(TAG, "onLocationChanged: " + location.getLatitude() + "/" + location.getLongitude());
+
         if (mIsStopped) return;
+
+
+        sendLocationToMap(location);
 
         if ((SystemUtils.isCharging(this) && mLocationRequest.getInterval() == INTERVAL)
                 || (!SystemUtils.isCharging(this) && mLocationRequest.getInterval() == INTERVAL_WHEN_CHARGING)) {
@@ -178,9 +173,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }
 
         try {
-            mDb.insert_P(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()),tourID);
+            mDb.insert_P(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), tourID);
 
-            Toast.makeText(this,"NEuer Punkt" +location.getLatitude() + "   dd   " + location.getLongitude(), Toast.LENGTH_SHORT);
+            Toast.makeText(this, "NEuer Punkt" + location.getLatitude() + "   dd   " + location.getLongitude(), Toast
+                    .LENGTH_SHORT);
 
            /* mDb.addPosition(new Position(location.getLatitude(), location.getLongitude(), location.getAltitude(),
                             location.getAccuracy(), location.getSpeed(), location.getTime(), rAngle, 0, mMaxGforce),
@@ -189,7 +185,17 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             Log.e(TAG, "onLocationChanged: Error while adding position.");
         }
 
-        mMaxGforce = 0;
+    }
+
+
+    private void sendLocationToMap(Location location) {
+        Intent intent = new Intent();
+        intent.setAction(LOCATION_BROADCAST);
+
+        intent.putExtra("latitude", location.getLatitude());
+        intent.putExtra("longitude", location.getLongitude());
+
+        sendBroadcast(intent);
     }
 
 

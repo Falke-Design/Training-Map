@@ -33,29 +33,28 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 public class MainActivity extends Activity {
 
-    TextView tv;
-    int i = 0;
 
-    DbHelper db;
-    Intent myservice;
-    int count = 0;
-    int ads;
+    // private !!
+    private TextView tv;
+    private int i = 0;
+
+    /**
+     * Member besser anders schreiben...
+     * hier mehr: {@link "https://source.android.com/source/code-style.html"}
+     */
+    private DbHelper db;
+    private Intent myservice;
+    private int count = 0;
+    private int ads;
 
 
     private static final String TAG = "MainActivity";
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
 
-    private float m_rAngleRaw = 0f;
-    private float m_rAngleCalibration = 0f;
-
     private boolean mIsTracking = false;
 
     private LocationService mLocationService;
-
-
-
-
 
 
     private boolean mBounded;
@@ -118,7 +117,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                if(mIsTracking) {
+                if (mIsTracking) {
                     mIsTracking = false;
                     stopService();
                 }
@@ -164,6 +163,7 @@ public class MainActivity extends Activity {
 
         super.onDestroy();
     }
+
 
     private void ensureWarningIfMissingGps() {
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -229,7 +229,8 @@ public class MainActivity extends Activity {
                             @TargetApi(Build.VERSION_CODES.M)
                             @Override
                             public void onDismiss(DialogInterface dialog) {
-                                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},PERMISSION_REQUEST_FINE_LOCATION);
+                                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        PERMISSION_REQUEST_FINE_LOCATION);
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
@@ -278,7 +279,6 @@ public class MainActivity extends Activity {
         String tourName = "";
         String tourNote = "";
 
-        intent.putExtra("r_angle_calibration", m_rAngleCalibration);
         intent.putExtra("tour_name", "test");
         intent.putExtra("tour_note", "testnote");
         bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
@@ -291,6 +291,7 @@ public class MainActivity extends Activity {
             mBounded = false;
         }
     }
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -308,6 +309,7 @@ public class MainActivity extends Activity {
                 .build();
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -317,6 +319,7 @@ public class MainActivity extends Activity {
         client.connect();
         AppIndex.AppIndexApi.start(client, getIndexApiAction());
     }
+
 
     @Override
     public void onStop() {
