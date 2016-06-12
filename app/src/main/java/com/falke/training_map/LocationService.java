@@ -154,23 +154,23 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
         sendLocationToMap(location);
 
-        if ((SystemUtils.isCharging(this) && mLocationRequest.getInterval() == INTERVAL)
-                || (!SystemUtils.isCharging(this) && mLocationRequest.getInterval() == INTERVAL_WHEN_CHARGING)) {
-            if (ActivityCompat.checkSelfPermission(this, Const.P_F_LOC) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(this, Const.P_C_LOC) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-
-            mLocationRequest = null;
-            mLocationRequest = new LocationRequest();
-            mLocationRequest.setInterval(SystemUtils.isCharging(this) ? INTERVAL_WHEN_CHARGING : INTERVAL);
-            mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            mLocationRequest.setInterval(SystemUtils.isCharging(this) ? INTERVAL_WHEN_CHARGING : INTERVAL);
-
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
+        //        if ((SystemUtils.isCharging(this) && mLocationRequest.getInterval() == INTERVAL)
+        //                || (!SystemUtils.isCharging(this) && mLocationRequest.getInterval() == INTERVAL_WHEN_CHARGING)) {
+        //            if (ActivityCompat.checkSelfPermission(this, Const.P_F_LOC) != PackageManager.PERMISSION_GRANTED
+        //                    && ActivityCompat.checkSelfPermission(this, Const.P_C_LOC) != PackageManager.PERMISSION_GRANTED) {
+        //                return;
+        //            }
+        //            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        //
+        //            mLocationRequest = null;
+        //            mLocationRequest = new LocationRequest();
+        //            mLocationRequest.setInterval(SystemUtils.isCharging(this) ? INTERVAL_WHEN_CHARGING : INTERVAL);
+        //            mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        //            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        //            mLocationRequest.setInterval(SystemUtils.isCharging(this) ? INTERVAL_WHEN_CHARGING : INTERVAL);
+        //
+        //            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        //        }
 
         try {
             mDb.insert_P(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), tourID);
